@@ -280,6 +280,10 @@ function AdminDashboard() {
   if (session === null) {
     return <AdminAuth />;
   }
+
+  return <Dashboard email={session.email ?? ""} />;
+}
+
 interface StudentPortalProps {
   email: string;
   subscription: any;
