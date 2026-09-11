@@ -32,14 +32,15 @@ export const Route = createFileRoute("/payment-confirmed")({
     ],
   }),
   validateSearch: (search: Record<string, unknown>) => {
+    const s = search as any;
     return {
-      orderId: String(search.orderId || "TNB-" + Math.floor(100000 + Math.random() * 900000)),
-      phone: String(search.phone || "5513991878104"),
-      name: String(search.name || "Student"),
-      plan: String(search.plan || "yearly"),
-      paymentMethod: String(search.paymentMethod || "pix"),
-      amount: String(search.amount || "R$ 252,00"),
-      expiresAt: String(search.expiresAt || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()),
+      orderId: String(s.orderId || "TNB-" + Math.floor(100000 + Math.random() * 900000)),
+      phone: String(s.phone || "5513991878104"),
+      name: String(s.name || "Student"),
+      plan: String(s.plan || "yearly"),
+      paymentMethod: String(s.paymentMethod || "pix"),
+      amount: String(s.amount || "R$ 252,00"),
+      expiresAt: String(s.expiresAt || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()),
     };
   },
   component: PaymentConfirmedPage,
@@ -79,15 +80,15 @@ function PaymentConfirmedPage() {
     yearly: t.pricing.yearlyPlanName,
     lifetime: "Lifetime VIP",
   };
-  const planDisplayName = planTitles[search.plan] || t.pricing.yearlyPlanName;
+  const planDisplayName = planTitles[s.plan] || t.pricing.yearlyPlanName;
 
   const starterMessage =
-    search.plan === "trial"
-      ? `Hello Talk'n'Bit! 🚀 I just activated my 15-Day Free Trial (Order #${search.orderId}). My name is ${search.name}. I'm ready to start practicing English!`
-      : `Hello Talk'n'Bit! 🚀 I just activated my ${planDisplayName} (Order #${search.orderId}). My name is ${search.name}. I'm ready to start practicing English!`;
+    s.plan === "trial"
+      ? `Hello Talk'n'Bit! 🚀 I just activated my 15-Day Free Trial (Order #${s.orderId}). My name is ${s.name}. I'm ready to start practicing English!`
+      : `Hello Talk'n'Bit! 🚀 I just activated my ${planDisplayName} (Order #${s.orderId}). My name is ${s.name}. I'm ready to start practicing English!`;
   const whatsAppUrl = getWhatsAppUrl(starterMessage);
 
-  const formattedDate = new Date(search.expiresAt).toLocaleDateString([], {
+  const formattedDate = new Date(s.expiresAt).toLocaleDateString([], {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -150,13 +151,13 @@ function PaymentConfirmedPage() {
 
           <div className="space-y-1.5">
             <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-100/80 px-3.5 py-1 rounded-full border border-emerald-200">
-              {search.plan === "trial" ? t.checkout.trialReceiptBadge : t.confirmation.celebration}
+              {s.plan === "trial" ? t.checkout.trialReceiptBadge : t.confirmation.celebration}
             </span>
             <h1 className="text-2xl sm:text-4xl font-extrabold text-[#1f0a44] pt-1">
-              {search.plan === "trial" ? t.confirmation.trialActivatedTitle : t.confirmation.heading}
+              {s.plan === "trial" ? t.confirmation.trialActivatedTitle : t.confirmation.heading}
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-              {search.plan === "trial" ? t.confirmation.trialActivatedSub : t.confirmation.subheading}
+              {s.plan === "trial" ? t.confirmation.trialActivatedSub : t.confirmation.subheading}
             </p>
           </div>
 
@@ -168,7 +169,7 @@ function PaymentConfirmedPage() {
               rel="noopener noreferrer"
               className="block w-full py-5 px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm shadow-xl shadow-emerald-700/25 transition-all hover:scale-[1.02] active:scale-[0.98] text-center"
             >
-              {search.plan === "trial" ? t.confirmation.trialOpenWhatsAppBtn : t.confirmation.openWhatsAppBtn}
+              {s.plan === "trial" ? t.confirmation.trialOpenWhatsAppBtn : t.confirmation.openWhatsAppBtn}
             </a>
           </div>
         </div>
@@ -185,12 +186,12 @@ function PaymentConfirmedPage() {
           <div className="grid sm:grid-cols-2 gap-4 text-xs">
             <div className="p-3.5 rounded-2xl bg-slate-50/70 border border-slate-100 space-y-1">
               <span className="text-slate-400 font-medium">{t.confirmation.orderIdLabel}</span>
-              <p className="font-mono font-bold text-purple-950 text-sm">{search.orderId}</p>
+              <p className="font-mono font-bold text-purple-950 text-sm">{s.orderId}</p>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-50/70 border border-slate-100 space-y-1">
               <span className="text-slate-400 font-medium">{t.confirmation.phoneLabel}</span>
-              <p className="font-mono font-bold text-purple-950 text-sm">+{search.phone}</p>
+              <p className="font-mono font-bold text-purple-950 text-sm">+{s.phone}</p>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-50/70 border border-slate-100 space-y-1">
@@ -244,7 +245,7 @@ function PaymentConfirmedPage() {
         {/* Support & Home Link */}
         <div className="text-center space-y-3 pt-2">
           <p className="text-xs text-slate-500">
-            {t.confirmation.needHelp} <a href={getWhatsAppUrl("Hello! I need help with my Talk'n'Bit order #" + search.orderId)} target="_blank" rel="noopener noreferrer" className="text-purple-700 font-semibold underline underline-offset-4 hover:text-purple-950">{t.confirmation.contactSupport}</a>
+            {t.confirmation.needHelp} <a href={getWhatsAppUrl("Hello! I need help with my Talk'n'Bit order #" + s.orderId)} target="_blank" rel="noopener noreferrer" className="text-purple-700 font-semibold underline underline-offset-4 hover:text-purple-950">{t.confirmation.contactSupport}</a>
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
